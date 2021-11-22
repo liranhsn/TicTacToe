@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
     private int player1Points, player2Points;
     private boolean player1Turn = true;
     private int roundCount;
-    ImageView ImageViewPlayer;
+    ImageView ImageViewPlayer, WinLineImV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
 
         ImageViewPlayer = findViewById(R.id.main_user_imageV);
         ImageViewPlayer.setImageResource(R.drawable.xplay);
+
+        WinLineImV = findViewById(R.id.main_winline_iv);
 
         Button buttonReset = findViewById(R.id.button_reset);
         buttonReset.setOnClickListener(new View.OnClickListener() {
@@ -76,18 +78,23 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
     private boolean checkForWin() {
 
         for (int i = 0; i < 3; i++) {
+
+            // Check rows
             if (ClickImage[i][0].getTag().equals(ClickImage[i][1].getTag())
                     && ClickImage[i][0].getTag().equals(ClickImage[i][2].getTag())
                     && !ClickImage[i][0].getTag().equals("")) {
 
+                putWinLine(i, "row");
                 return true;
             }
-        }
 
-        for (int i = 0; i < 3; i++) {
+            //Check columns
             if (ClickImage[0][i].getTag().equals(ClickImage[1][i].getTag())
                     && ClickImage[0][i].getTag().equals(ClickImage[2][i].getTag())
                     && !ClickImage[0][i].getTag().equals("")) {
+
+                putWinLine(i , "col");
+
                 return true;
             }
         }
@@ -95,12 +102,15 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         if (ClickImage[0][0].getTag().equals(ClickImage[1][1].getTag())
                 && ClickImage[0][0].getTag().equals(ClickImage[2][2].getTag())
                 && !ClickImage[0][0].getTag().equals("")) {
+
+            putWinLine(1, "mark");
             return true;
         }
 
         if (ClickImage[0][2].getTag().equals(ClickImage[1][1].getTag())
                 && ClickImage[0][2].getTag().equals(ClickImage[2][0].getTag())
                 && !ClickImage[0][2].getTag().equals("")) {
+            putWinLine(2 , "mark");
             return true;
         }
         return false;
@@ -156,11 +166,20 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
                 roundCount = 0;
                 player1Turn = true;
                 ImageViewPlayer.setImageResource(R.drawable.xplay);
+                WinLineImV.setImageResource(R.drawable.empty);
 
             }
         }, 2000);
 
 
     }
+
+    private void putWinLine(int index, String type){
+
+        String WinLineID = type + (index+1);
+        WinLineImV.setImageResource(getResources().getIdentifier(
+                WinLineID, "drawable", getPackageName()));
+
+        }
 
 }
